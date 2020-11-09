@@ -2,6 +2,7 @@ package hellocucumber;
 
 import io.cucumber.java.en.Given;
 
+
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -14,22 +15,19 @@ import java.net.URL;
 import java.util.Scanner;
 
 
-public class UserStory1 {
+public class UserStory5 {
 	
-	private boolean student;
+	private String classId;
+	private String className;
 	
-	@Given("I am a student")
-	public void i_am_a_student() {
-	    // Write code here that turns the phrase above into concrete actions
-	    this.student = true;
-	}
-
-	@When("I categorize {string} as {string}")
-	public void i_categorize_as(String task, String priority) {
-		task = RunTest.get_task();
-		priority = RunTest.get_priority();
+	
+	@When("I create a todo list for a new class")
+	public void i_create_a_todo_list_for_a_new_class() {
+	    //create new class
+		className = "Biology";
+		
 		try {
-			String request = "http://localhost:4567/todos/" + task;
+			String request = "http://localhost:4567/projects";
 			URL url = new URL (request);
 			HttpURLConnection con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("POST");
@@ -37,7 +35,7 @@ public class UserStory1 {
 			con.setRequestProperty("Accept", "application/json");
 			con.setDoOutput(true);
 			
-			String jsonInputString = "{\"description\":" + priority + "}";
+			String jsonInputString = "{\"title\":" + className + "}";
 			
 			try(OutputStream os = con.getOutputStream()){
 				byte[] input = jsonInputString.getBytes("utf-8");
@@ -45,20 +43,17 @@ public class UserStory1 {
 			}
 			
 			int code = con.getResponseCode();
-			assertEquals(code, 200);
+			assertEquals(code, 201);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
-
-	}
-	
-	@When("I categorize {string} as HIGH")
-	public void i_categorize_as_high(String task) {
-		task = RunTest.get_task();
-		String priority = "HIGH";
+		
+		//add todo list to new course
+		classId = "2";
+		
 		try {
-			String request = "http://localhost:4567/todos/" + task;
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
 			URL url = new URL (request);
 			HttpURLConnection con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("POST");
@@ -66,7 +61,7 @@ public class UserStory1 {
 			con.setRequestProperty("Accept", "application/json");
 			con.setDoOutput(true);
 			
-			String jsonInputString = "{\"description\":" + priority + "}";
+			String jsonInputString = "{\"id\":\"1\"}";
 			
 			try(OutputStream os = con.getOutputStream()){
 				byte[] input = jsonInputString.getBytes("utf-8");
@@ -74,106 +69,19 @@ public class UserStory1 {
 			}
 			
 			int code = con.getResponseCode();
-			assertEquals(code, 200);
+			assertEquals(code, 201);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
-	}
-	
-	@When("I categorize {string} as LOW")
-	public void i_categorize_as_low(String task) {
-		task = RunTest.get_task();
-		String priority = "HIGH";
-		try {
-			String request = "http://localhost:4567/todos/" + task;
-			URL url = new URL (request);
-			HttpURLConnection con = (HttpURLConnection)url.openConnection();
-			con.setRequestMethod("POST");
-			con.setRequestProperty("Content-Type", "application/json; utf-8");
-			con.setRequestProperty("Accept", "application/json");
-			con.setDoOutput(true);
-			
-			String jsonInputString = "{\"description\":" + priority + "}";
-			
-			try(OutputStream os = con.getOutputStream()){
-				byte[] input = jsonInputString.getBytes("utf-8");
-				os.write(input, 0, input.length);			
-			}
-			
-			int code = con.getResponseCode();
-			assertEquals(code, 200);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
-	}
-	
-	@When("I catagorize nonexistent task")
-	public void i_catagorize_nonexistent_task() {
-		String task = "699";
-		String priority = "HIGH";
-		try {
-			String request = "http://localhost:4567/todos/" + task;
-			URL url = new URL (request);
-			HttpURLConnection con = (HttpURLConnection)url.openConnection();
-			con.setRequestMethod("POST");
-			con.setRequestProperty("Content-Type", "application/json; utf-8");
-			con.setRequestProperty("Accept", "application/json");
-			con.setDoOutput(true);
-			
-			String jsonInputString = "{\"description\":" + priority + "}";
-			
-			try(OutputStream os = con.getOutputStream()){
-				byte[] input = jsonInputString.getBytes("utf-8");
-				os.write(input, 0, input.length);			
-			}
-			
-			int code = con.getResponseCode();
-			assertEquals(code, 404);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
+		
 	}
 
-	@Then("I receive an error")
-	public void i_receive_an_error() {
-		String task = "699";
+	@Then("I can view todo list is linked to the new class")
+	public void i_can_view_todo_list_is_linked_to_the_new_class() {
+		classId = "2";
 		try {
-			String request = "http://localhost:4567/todos/" + task;
-			URL url = new URL(request);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	        conn.setRequestMethod("GET");
-	        conn.connect();
-	        
-	        int code = conn.getResponseCode();
-			assertEquals(code, 404);
-	        
-	        String inline = "";
-            Scanner scanner = new Scanner(url.openStream());
-
-            //Write all the JSON data into a string using a scanner
-            while (scanner.hasNext()) {
-                inline += scanner.nextLine();
-            }
-
-            //Close the scanner
-            scanner.close();
-	        
-		} catch (Exception e) {
-			
-		}
-	}
-
-
-
-
-	@Then("I can view the {string} priority in the description")
-	public void i_can_view_the_priority_in_the_description(String task) {
-		task = RunTest.get_task();
-		try {
-			String request = "http://localhost:4567/todos/" + task;
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
 			URL url = new URL(request);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	        conn.setRequestMethod("GET");
@@ -196,8 +104,120 @@ public class UserStory1 {
 		} catch (Exception e) {
 			
 		}
+	}
 
-        
+	@When("I create a todo list for an existing class")
+	public void i_create_a_todo_list_for_an_existing_class() {
+		classId = "1";
+		
+		try {
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
+			URL url = new URL (request);
+			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json; utf-8");
+			con.setRequestProperty("Accept", "application/json");
+			con.setDoOutput(true);
+			
+			String jsonInputString = "{\"id\":\"1\"}";
+			
+			try(OutputStream os = con.getOutputStream()){
+				byte[] input = jsonInputString.getBytes("utf-8");
+				os.write(input, 0, input.length);			
+			}
+			
+			int code = con.getResponseCode();
+			assertEquals(code, 201);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+
+	@Then("I can view todo list is linked to the existing class")
+	public void i_can_view_todo_list_is_linked_to_the_existing_class() {
+		classId = "1";
+		try {
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
+			URL url = new URL(request);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.connect();
+	        
+	        int code = conn.getResponseCode();
+			assertEquals(code, 200);
+	        
+	        String inline = "";
+            Scanner scanner = new Scanner(url.openStream());
+
+            //Write all the JSON data into a string using a scanner
+            while (scanner.hasNext()) {
+                inline += scanner.nextLine();
+            }
+
+            //Close the scanner
+            scanner.close();
+	        
+		} catch (Exception e) {
+			
+		}
+	}
+
+	@When("I create a todo list for a nonexistent class")
+	public void i_create_a_todo_list_for_a_nonexistent_class() {
+		classId = "699";
+		
+		try {
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
+			URL url = new URL (request);
+			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json; utf-8");
+			con.setRequestProperty("Accept", "application/json");
+			con.setDoOutput(true);
+			
+			String jsonInputString = "{\"id\":\"2\"}";
+			
+			try(OutputStream os = con.getOutputStream()){
+				byte[] input = jsonInputString.getBytes("utf-8");
+				os.write(input, 0, input.length);			
+			}
+			
+			int code = con.getResponseCode();
+			assertEquals(code, 404);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+
+	@Then("I get an error")
+	public void i_get_an_error() {
+		String task = "699";
+		try {
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
+			URL url = new URL(request);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.connect();
+	        
+	        int code = conn.getResponseCode();
+			assertEquals(code, 200);
+	        
+	        String inline = "";
+            Scanner scanner = new Scanner(url.openStream());
+
+            //Write all the JSON data into a string using a scanner
+            while (scanner.hasNext()) {
+                inline += scanner.nextLine();
+            }
+
+            //Close the scanner
+            scanner.close();
+	        
+		} catch (Exception e) {
+			
+		}
 	}
 
 
