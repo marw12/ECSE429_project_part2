@@ -37,8 +37,7 @@ public class UserStory1 {
 
 	@When("I categorize {string} as {string}")
 	public void i_categorize_as(String task, String priority) {
-		task = RunTest.get_task();
-		priority = RunTest.get_priority();
+
 		try {
 			String request = "http://localhost:4567/todos/" + task;
 			URL url = new URL (request);
@@ -66,8 +65,34 @@ public class UserStory1 {
 	
 	@When("I categorize {string} as HIGH")
 	public void i_categorize_as_high(String task) {
-		task = RunTest.get_task();
 		String priority = "HIGH";
+		try {
+			String request = "http://localhost:4567/todos/" + task;
+			URL url = new URL (request);
+			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json; utf-8");
+			con.setRequestProperty("Accept", "application/json");
+			con.setDoOutput(true);
+			
+			String jsonInputString = "{\"description\":" + priority + "}";
+			
+			try(OutputStream os = con.getOutputStream()){
+				byte[] input = jsonInputString.getBytes("utf-8");
+				os.write(input, 0, input.length);			
+			}
+			
+			int code = con.getResponseCode();
+			assertEquals(code, 200);
+
+		} catch (Exception e) {
+			
+		}	
+	}
+	
+	@When("I categorize {string} as MEDIUM")
+	public void i_categorize_as_medium(String task) {
+		String priority = "MEDIUM";
 		try {
 			String request = "http://localhost:4567/todos/" + task;
 			URL url = new URL (request);
@@ -94,8 +119,8 @@ public class UserStory1 {
 	
 	@When("I categorize {string} as LOW")
 	public void i_categorize_as_low(String task) {
-		task = RunTest.get_task();
-		String priority = "HIGH";
+		
+		String priority = "LOW";
 		try {
 			String request = "http://localhost:4567/todos/" + task;
 			URL url = new URL (request);

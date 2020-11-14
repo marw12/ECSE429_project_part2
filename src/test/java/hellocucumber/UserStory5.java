@@ -219,6 +219,63 @@ public class UserStory5 {
 			
 		}
 	}
+	
 
+	@When("I create a {string} list for a {string}")
+	public void i_create_a_list_for_a(String todoId, String classId) {
+		
+		try {
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
+			URL url = new URL (request);
+			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/json; utf-8");
+			con.setRequestProperty("Accept", "application/json");
+			con.setDoOutput(true);
+			
+			String jsonInputString = "{\"id\":\"" + todoId + "\"}";
+			
+			try(OutputStream os = con.getOutputStream()){
+				byte[] input = jsonInputString.getBytes("utf-8");
+				os.write(input, 0, input.length);			
+			}
+			
+			int code = con.getResponseCode();
+			assertEquals(code, 201);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	
+	}
+
+	@Then("I can view todo list is linked to the {string}")
+	public void i_can_view_todo_list_is_linked_to_the(String classId) {
+		
+		try {
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
+			URL url = new URL(request);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.connect();
+	        
+	        int code = conn.getResponseCode();
+			assertEquals(code, 200);
+	        
+	        String inline = "";
+            Scanner scanner = new Scanner(url.openStream());
+
+            //Write all the JSON data into a string using a scanner
+            while (scanner.hasNext()) {
+                inline += scanner.nextLine();
+            }
+
+            //Close the scanner
+            scanner.close();
+	        
+		} catch (Exception e) {
+			
+		}
+	}
 
 }

@@ -17,3 +17,12 @@ Feature: Add todo list items to a class
   Scenario: Add a todo list to a nonexistent class
     When I create a todo list for a nonexistent class
     Then I get an error
+    
+  Scenario Outline: Add a <todo> list to a <class>
+  	When I create a <todo> list for a <class>
+    Then I can view todo list is linked to the <class>
+    
+  Examples:
+    | class | todo |
+    |  "1"  |	"2"	 |
+    |  "2"  |	"1"	 |
