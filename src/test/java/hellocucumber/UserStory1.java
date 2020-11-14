@@ -8,21 +8,32 @@ import io.cucumber.java.en.When;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-
+	
 public class UserStory1 {
 	
 	private boolean student;
 	
 	@Given("I am a student")
-	public void i_am_a_student() {
+	public void i_am_a_student() throws ConnectException {
 	    // Write code here that turns the phrase above into concrete actions
-	    this.student = true;
-	}
+		try {
+			String request = "http://localhost:4567/";
+			URL url = new URL(request);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+	        conn.connect();
+			this.student = true;
+		} catch (Exception e) {
+			throw new java.net.ConnectException();
+		}	
+	}	
 
 	@When("I categorize {string} as {string}")
 	public void i_categorize_as(String task, String priority) {
@@ -48,7 +59,7 @@ public class UserStory1 {
 			assertEquals(code, 200);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}	
 
 	}
@@ -77,7 +88,7 @@ public class UserStory1 {
 			assertEquals(code, 200);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}	
 	}
 	
@@ -105,7 +116,7 @@ public class UserStory1 {
 			assertEquals(code, 200);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}	
 	}
 	
@@ -133,7 +144,7 @@ public class UserStory1 {
 			assertEquals(code, 404);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}	
 	}
 
@@ -195,9 +206,7 @@ public class UserStory1 {
 	        
 		} catch (Exception e) {
 			
-		}
-
-        
+		}   
 	}
 
 
