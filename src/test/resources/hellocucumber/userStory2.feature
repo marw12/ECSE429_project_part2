@@ -44,5 +44,5 @@ Feature: Add a task in course to do list so I can remember it
 
     Examples: 
       | task  | 
-      | "7" |
+      | "2" |
  
