@@ -159,7 +159,7 @@ public class UserStory2 {
 	@When("I create a {string}")
 	public void i_create_a(String string) {
 		try {
-			String request = "http://localhost:4567/todos";
+			String request = "http://localhost:4567/todos/"+string;
 			URL url = new URL (request);
 			HttpURLConnection con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("POST");
@@ -167,7 +167,7 @@ public class UserStory2 {
 			con.setRequestProperty("Accept", "application/json");
 			con.setDoOutput(true);
 			
-			String jsonInputString = "{\"id\":" + string + "}";
+			String jsonInputString = "{\"title\":" + "\"NewNamewith7\"" + "}";
 			
 			try(OutputStream os = con.getOutputStream()){
 				byte[] input = jsonInputString.getBytes("utf-8");
@@ -175,7 +175,7 @@ public class UserStory2 {
 			}
 			
 			int code = con.getResponseCode();
-			assertEquals(code, 400);
+			assertEquals(code, 200);
 
 		} catch (Exception e) {
 			
