@@ -1,5 +1,10 @@
 package hellocucumber;
 
+import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
+import io.cucumber.java.Before;
+import io.cucumber.java.BeforeStep;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 
 
@@ -9,6 +14,7 @@ import io.cucumber.java.en.When;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -21,12 +27,6 @@ import org.json.simple.parser.JSONParser;
 
 public class UserStory7 {
 	
-	public static void main(String[] args) {
-		UserStory7 us = new UserStory7();
-		us.i_enter_query_for_incomplete_tasks_of_a_class();
-		us.i_can_view_the_incomplete_tasks();
-		us.i_enter_query_for_a_nonexistent_class();
-	}
 	
 	private ArrayList<Object> doneQuery;
 	private ArrayList<Object> notDoneQuery;
@@ -181,5 +181,94 @@ public class UserStory7 {
 
 		}
 	}
+	
+	@When("I enter query for incomplete tasks of a {string}")
+	public void i_enter_query_for_incomplete_tasks_of_a(String classId) {
+		notDoneQuery = new ArrayList<Object>();
+		
+		try {
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
+			URL url = new URL(request);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.connect();
+	        
+	        int code = conn.getResponseCode();
+			assertEquals(code, 200);
+	        
+	        String inline = "";
+            Scanner scanner = new Scanner(url.openStream());
+
+            //Write all the JSON data into a string using a scanner
+            while (scanner.hasNext()) {
+                inline += scanner.nextLine();
+            }
+
+            //Close the scanner
+            scanner.close();
+            
+            JSONParser parse = new JSONParser();
+            JSONObject jobj = (JSONObject)parse.parse(inline);
+            JSONArray jsonarr_1 = (JSONArray) jobj.get("todos");
+            
+            
+            for(int i=0; i<jsonarr_1.size() ;i++) {
+            	JSONObject obj = (JSONObject)jsonarr_1.get(i);
+            	
+            	if(obj.get("doneStatus").equals("false")) {
+            		notDoneQuery.add(obj.get("title"));
+            	}
+            	
+            }
+                    
+		} catch (Exception e) {
+			
+		}
+	}
+
+	@When("I enter query for complete tasks of a {string}")
+	public void i_enter_query_for_complete_tasks_of_a(String classId) {
+		doneQuery = new ArrayList<Object>();
+		
+		try {
+			String request = "http://localhost:4567/projects/" + classId + "/tasks";
+			URL url = new URL(request);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+	        conn.connect();
+	        
+	        int code = conn.getResponseCode();
+			assertEquals(code, 200);
+	        
+	        String inline = "";
+            Scanner scanner = new Scanner(url.openStream());
+
+            //Write all the JSON data into a string using a scanner
+            while (scanner.hasNext()) {
+                inline += scanner.nextLine();
+            }
+
+            //Close the scanner
+            scanner.close();
+            
+            JSONParser parse = new JSONParser();
+            JSONObject jobj = (JSONObject)parse.parse(inline);
+            JSONArray jsonarr_1 = (JSONArray) jobj.get("todos");
+            
+            
+            for(int i=0; i<jsonarr_1.size() ;i++) {
+            	JSONObject obj = (JSONObject)jsonarr_1.get(i);
+            	
+            	if(obj.get("doneStatus").equals("true")) {
+            		doneQuery.add(obj.get("title"));
+            	}
+            	
+            }
+                    
+		} catch (Exception e) {
+			
+		}
+	}
+
 
 }
