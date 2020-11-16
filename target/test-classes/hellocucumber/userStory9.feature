@@ -2,6 +2,7 @@ Feature: Adjust the priority of a task
   I want to better manage my time
   
  	Background: 
+ 	 	Given wait for server to start
  		Given I am a student
  		
  	Scenario: Adjust the priority of a task to a new priority

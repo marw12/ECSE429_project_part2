@@ -20,6 +20,7 @@
 Feature: Mark a task as done on the course to do list, so I can track the accomplishments.
 
  	Background: 
+ 		Given wait for server to start
  		Given I am a student
  		
   @tag1

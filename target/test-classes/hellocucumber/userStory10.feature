@@ -1,7 +1,8 @@
 Feature: Change the description of task
   I want to better represent the work I do
   
- 	Background: 
+ 	Background:
+ 		Given wait for server to start 
  		Given I am a student
  		
  	Scenario: Change the description of a task to a new description

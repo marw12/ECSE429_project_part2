@@ -20,6 +20,7 @@
 Feature: Add a task in course to do list so I can remember it
 
 	Background: 
+			Given wait for server to start
 			Given I am a student
 
   @tag1

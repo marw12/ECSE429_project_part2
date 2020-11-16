@@ -2,6 +2,7 @@ Feature: Query all incomplete HIGH priority tasks
   I want to identify my short term goals
   
  	Background: 
+ 	 	Given wait for server to start
  		Given I am a student
  		
  	Scenario: Query incomplete HIGH priority tasks from all classes

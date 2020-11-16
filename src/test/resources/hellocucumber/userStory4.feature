@@ -20,6 +20,7 @@
 Feature: I remove an unnecessary task from my course to do list, so I can forget about it.
 
  	Background: 
+ 	  Given wait for server to start
  		Given I am a student
  		
   @tag1
