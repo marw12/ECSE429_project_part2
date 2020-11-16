@@ -2,6 +2,7 @@ Feature: Categorize tasks as HIGH, MEDIUM or LOW priority
   I want to better manage my time
   
  	Background: 
+ 		Given wait for server to start
  		Given I am a student
  		
  	Scenario: Cannot catagorize nonexistent task

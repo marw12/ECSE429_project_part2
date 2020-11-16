@@ -2,6 +2,7 @@ Feature: Add todo list items to a class
   I want to create a todo list for a new class
   
  	Background: 
+ 		Given wait for server to start
  		Given I am a student
  		
  	Scenario: Add an existing todo list to a new class

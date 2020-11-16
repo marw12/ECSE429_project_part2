@@ -1,5 +1,10 @@
 package hellocucumber;
 
+import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
+import io.cucumber.java.Before;
+import io.cucumber.java.BeforeStep;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 
 
@@ -9,6 +14,7 @@ import io.cucumber.java.en.When;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,6 +22,7 @@ import java.util.Scanner;
 
 
 public class UserStory5 {
+	
 	
 	private String classId;
 	private String className;
@@ -89,18 +96,7 @@ public class UserStory5 {
 	        
 	        int code = conn.getResponseCode();
 			assertEquals(code, 200);
-	        
-	        String inline = "";
-            Scanner scanner = new Scanner(url.openStream());
-
-            //Write all the JSON data into a string using a scanner
-            while (scanner.hasNext()) {
-                inline += scanner.nextLine();
-            }
-
-            //Close the scanner
-            scanner.close();
-	        
+	       
 		} catch (Exception e) {
 			
 		}
@@ -146,18 +142,7 @@ public class UserStory5 {
 	        
 	        int code = conn.getResponseCode();
 			assertEquals(code, 200);
-	        
-	        String inline = "";
-            Scanner scanner = new Scanner(url.openStream());
-
-            //Write all the JSON data into a string using a scanner
-            while (scanner.hasNext()) {
-                inline += scanner.nextLine();
-            }
-
-            //Close the scanner
-            scanner.close();
-	        
+	       
 		} catch (Exception e) {
 			
 		}
@@ -203,18 +188,7 @@ public class UserStory5 {
 	        
 	        int code = conn.getResponseCode();
 			assertEquals(code, 200);
-	        
-	        String inline = "";
-            Scanner scanner = new Scanner(url.openStream());
-
-            //Write all the JSON data into a string using a scanner
-            while (scanner.hasNext()) {
-                inline += scanner.nextLine();
-            }
-
-            //Close the scanner
-            scanner.close();
-	        
+	       
 		} catch (Exception e) {
 			
 		}
@@ -261,18 +235,7 @@ public class UserStory5 {
 	        
 	        int code = conn.getResponseCode();
 			assertEquals(code, 200);
-	        
-	        String inline = "";
-            Scanner scanner = new Scanner(url.openStream());
-
-            //Write all the JSON data into a string using a scanner
-            while (scanner.hasNext()) {
-                inline += scanner.nextLine();
-            }
-
-            //Close the scanner
-            scanner.close();
-	        
+	       
 		} catch (Exception e) {
 			
 		}

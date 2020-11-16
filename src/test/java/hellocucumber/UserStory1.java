@@ -1,5 +1,10 @@
 package hellocucumber;
 
+import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
+import io.cucumber.java.Before;
+import io.cucumber.java.BeforeStep;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 
 import io.cucumber.java.en.Then;
@@ -7,8 +12,10 @@ import io.cucumber.java.en.When;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -18,23 +25,30 @@ import java.util.Scanner;
 	
 public class UserStory1 {
 	
+	@Given("wait for server to start")
+    public void wait_for_server_to_start() throws ConnectException {
+		
+		Runtime rt = Runtime.getRuntime();
+		
+    	try {
+    		Process p1 = rt.exec("java -jar runTodoManagerRestAPI-1.5.5.jar");
+			Process p2 = Runtime.getRuntime().exec("sleep 3s");
+			
+		} catch (Exception e) {
+			throw new java.net.ConnectException();
+		}
+    }
+	
+	
 	private boolean student;
 	
 	@Given("I am a student")
 	public void i_am_a_student() throws ConnectException {
-	    // Write code here that turns the phrase above into concrete actions
-		try {
-			String request = "http://localhost:4567/";
-			URL url = new URL(request);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-	        conn.connect();
-			this.student = true;
-		} catch (Exception e) {
-			throw new java.net.ConnectException();
-		}	
+		
+		student = true;
+	    
 	}	
-
+	
 	@When("I categorize {string} as {string}")
 	public void i_categorize_as(String task, String priority) {
 
@@ -58,7 +72,7 @@ public class UserStory1 {
 			assertEquals(code, 200);
 
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}	
 
 	}
@@ -86,7 +100,7 @@ public class UserStory1 {
 			assertEquals(code, 200);
 
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}	
 	}
 	
@@ -113,7 +127,7 @@ public class UserStory1 {
 			assertEquals(code, 200);
 
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}	
 	}
 	
@@ -169,7 +183,7 @@ public class UserStory1 {
 			assertEquals(code, 404);
 
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}	
 	}
 
@@ -186,17 +200,6 @@ public class UserStory1 {
 	        int code = conn.getResponseCode();
 			assertEquals(code, 404);
 	        
-	        String inline = "";
-            Scanner scanner = new Scanner(url.openStream());
-
-            //Write all the JSON data into a string using a scanner
-            while (scanner.hasNext()) {
-                inline += scanner.nextLine();
-            }
-
-            //Close the scanner
-            scanner.close();
-	        
 		} catch (Exception e) {
 			
 		}
@@ -207,7 +210,7 @@ public class UserStory1 {
 
 	@Then("I can view the {string} priority in the description")
 	public void i_can_view_the_priority_in_the_description(String task) {
-		task = RunTest.get_task();
+
 		try {
 			String request = "http://localhost:4567/todos/" + task;
 			URL url = new URL(request);
@@ -217,17 +220,6 @@ public class UserStory1 {
 	        
 	        int code = conn.getResponseCode();
 			assertEquals(code, 200);
-	        
-	        String inline = "";
-            Scanner scanner = new Scanner(url.openStream());
-
-            //Write all the JSON data into a string using a scanner
-            while (scanner.hasNext()) {
-                inline += scanner.nextLine();
-            }
-
-            //Close the scanner
-            scanner.close();
 	        
 		} catch (Exception e) {
 			
